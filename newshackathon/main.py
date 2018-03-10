@@ -42,4 +42,8 @@ data = construct_data_set()
 
 X_train, X_test, Y_train, Y_test = split_data(data)
 
-train_svc_linear()
+print('Gaussian NB accuracy: ' + str(train_forest()))
+print('Random Forest accuracy: ' + str(train_forest()))
+print('SVM Polly accuracy: ' + str(train_svc_poly()))
+print('SVM Linear accuracy: ' + str(train_svc_linear()))
+print('SVM RBF accuracy: ' + str(train_svc_rbf()))

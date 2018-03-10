@@ -17,8 +17,8 @@ def construct_data_set():
     all_words_counter = real_words_counter + fake_words_counter
     word_index_dict = _choose_features(all_words_counter)
 
-    dataset = [_construct_data_vector(words_frequency, word_index_dict, True) for _, _, words_frequency in real_news]
-    dataset += [_construct_data_vector(words_frequency, word_index_dict, True) for _, _, words_frequency in real_news]
+    dataset = [_construct_data_vector(words_frequency, word_index_dict, False) for _, _, words_frequency in real_news]
+    dataset += [_construct_data_vector(words_frequency, word_index_dict, True) for _, _, words_frequency in fake_news]
     return np.array(dataset)
 
 
@@ -54,12 +54,11 @@ def _choose_features(words_counter):
     return word_index_dict
 
 
-def _construct_data_vector(words_frequency, word_index_dict, is_real):
+def _construct_data_vector(words_frequency, word_index_dict, is_false):
     data_vector = np.empty(len(word_index_dict) + 1)
-    data_vector[len(word_index_dict)] = int(is_real)
-    for word, frequency in words_frequency.items():
-        index = word_index_dict[word]
-        if index:
-            data_vector[index] = frequency
+    data_vector[len(word_index_dict)] = int(is_false)
+    for word, index in word_index_dict.items():
+        frequency = words_frequency.get(word, 0)
+        data_vector[index] = frequency
 
     return data_vector
