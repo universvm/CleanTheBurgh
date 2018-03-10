@@ -1,6 +1,6 @@
 import numpy as np
-from collections import Counter
 import json
+from collections import Counter
 from nltk.tokenize import word_tokenize
 from nltk.stem import WordNetLemmatizer
 from sklearn.tree import DecisionTreeRegressor
@@ -8,7 +8,6 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.linear_model import LogisticRegression, LogisticRegressionCV
 from sklearn.svm import SVC
 from sklearn.naive_bayes import GaussianNB
-
 from sklearn.metrics import accuracy_score
 from sklearn.model_selection import train_test_split
 from newshackathon.dataloading.data_constructor import construct_data_set

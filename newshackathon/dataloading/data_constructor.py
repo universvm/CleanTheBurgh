@@ -4,9 +4,10 @@ from collections import Counter
 from json.decoder import JSONDecodeError
 from newshackathon.dataloading.jsonparser import load_json_data
 from newshackathon.dataloading.processing import count_words
+from newshackathon.definitions import ROOT_DIR
 
-FAKE_NEWS_DIRECTORY = '../../Data/fake/'
-REAL_NEWS_DIRECTORY = '../../Data/real/'
+FAKE_NEWS_DIRECTORY = ROOT_DIR + '../Data/fake/'
+REAL_NEWS_DIRECTORY = ROOT_DIR + '../Data/real/'
 JSON_SUBDIRECTORY = 'json/'
 
 
