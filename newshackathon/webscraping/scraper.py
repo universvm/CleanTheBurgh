@@ -1,6 +1,7 @@
 import requests
 from bs4 import BeautifulSoup
 from urllib.parse import urlparse
+from newshackathon.textprocessing.processing import count_words
 
 
 def scrap_data(url):
@@ -76,6 +77,4 @@ def _extract_title(article):
 
 
 def _extract_body(article):
-    return [p.getText().strip() for p in(article.findAll('p') + article.findAll('span'))]
-
-print(scrap_data('https://www.stuff.co.nz/travel/102146208/new-york-times-article-puts-auckland-at-the-forefront-of-peoples-minds'))
+    return ' '.join([p.getText().strip() for p in(article.findAll('p') + article.findAll('span'))])
