@@ -1,5 +1,5 @@
 import json
-
+from newshackathon.definitions import ROOT_DIR
 # parses data and return a list of fake domain.
 
 def create_bs_dict():
@@ -8,7 +8,7 @@ def create_bs_dict():
     bs_list = []
     
     # Open BS detector File:
-    with open('bs_data.json') as bs_json:
+    with open(ROOT_DIR + 'bsdetector/bs_data.json') as bs_json:
         # Load JSON:
         bs_json = json.load(bs_json)
         # Going through the keys and replace value with 1:
@@ -16,7 +16,7 @@ def create_bs_dict():
             bs_list.append(key)
 
     # Open TheBlackList (bufala.it) Italian News File:
-    with open('bs_italian.txt', 'r+', encoding="utf-8") as bs_italian:
+    with open(ROOT_DIR + 'bsdetector/bs_italian.txt', 'r+', encoding="utf-8") as bs_italian:
         # Loop through list
         for it_domain in bs_italian.readlines():
             it_domain = it_domain.strip('\n').lower()

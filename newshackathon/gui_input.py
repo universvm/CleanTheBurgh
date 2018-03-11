@@ -3,10 +3,12 @@ from sklearn.svm import SVC
 from sklearn.naive_bayes import GaussianNB
 from sklearn.metrics import accuracy_score
 from sklearn.model_selection import train_test_split
+
 from newshackathon.dataloading.data_constructor import DataConstructor
 from tkinter import *
 from PIL import ImageTk, Image
 from newshackathon.dataloading.webscraper import scrap_data
+from newshackathon.bsdetector import bs_detect
 import numpy as np
 
 
@@ -64,16 +66,22 @@ def get_gui_input():
 
     domain, title, body = scrap_data(url_domain)
 
-    X_test = data_constructor.calculate_feature_vector(body)
-    print(X_test)
+    print(domain)
 
-    X_test = np.array(X_test)
-    print(X_test)
-    X_test = X_test.reshape(1, -1)
-    print('reshaped')
-    print(X_test)
+    domain_list = bs_detect.create_bs_dict()
+    if domain in domain_list:
+        result = 0
+    else:
+        X_test = data_constructor.calculate_feature_vector(body)
+        print(X_test)
 
-    result = forest_model.predict_proba(np.array(X_test))[0][0]
+        X_test = np.array(X_test)
+        print(X_test)
+        X_test = X_test.reshape(1, -1)
+        print('reshaped')
+        print(X_test)
+
+        result = forest_model.predict_proba(np.array(X_test))[0][0]
 
     text.insert(INSERT, "Clean probabilty:\n" + str(result*100)[0:5] + "%\n")
 
