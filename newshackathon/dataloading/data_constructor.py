@@ -1,19 +1,13 @@
 import os
 import numpy as np
 from collections import Counter
-from json.decoder import JSONDecodeError
+from multiprocessing import Pool
 from newshackathon.dataloading.jsonparser import load_json_data
 from newshackathon.dataloading.processing import count_words
-from newshackathon.dataloading.webscraper import scrap_data
-from newshackathon.definitions import ROOT_DIR
+from newshackathon.definitions import REAL_NEWS_DIRECTORY, FAKE_NEWS_DIRECTORY, JSON_SUBDIRECTORY
 
 MAX_WORD_FREQUENCY = 1
 MIN_WORD_FREQUENCY = 1 / 8
-
-FAKE_NEWS_DIRECTORY = ROOT_DIR + '../Data/fake/'
-REAL_NEWS_DIRECTORY = ROOT_DIR + '../Data/real/'
-JSON_SUBDIRECTORY = 'json/'
-URLS_FILENAME = 'urls.txt'
 
 
 def construct_data_set():
@@ -22,7 +16,7 @@ def construct_data_set():
     all_words_counter = real_words_counter + fake_words_counter
 
     word_index_dict = _choose_features(all_words_counter, len(fake_news) + len(real_news))
-    print('featureset size: '.format(word_index_dict))
+    print('featureset size: {}'.format(len(word_index_dict)))
 
     dataset = [_construct_data_vector(words_frequency, word_index_dict, False) for _, _, words_frequency in real_news]
     dataset += [_construct_data_vector(words_frequency, word_index_dict, True) for _, _, words_frequency in fake_news]
@@ -30,20 +24,10 @@ def construct_data_set():
 
 
 def _load_data(directory):
-    json_directory = directory + JSON_SUBDIRECTORY
-    data = []
-    for filename in os.listdir(json_directory):
-        try:
-            data.append(load_json_data(json_directory + filename))
-        except JSONDecodeError:
-            print(filename + ' doesn\'t work')
-
-    with open(directory + URLS_FILENAME, "r") as urls_file:
-        for url in urls_file:
-            try:
-                data.append(scrap_data(url))
-            except:
-                print(url + ' couldn\'t be scraped')
+    json_dir = directory + JSON_SUBDIRECTORY
+    with Pool(processes=4) as pool:
+        data = pool.map(load_json_data, [json_dir + filename for filename in os.listdir(json_dir)])
+        data = [d for d in data if d]  # Filter or exceptions
 
     processed_data = []
     all_words_counter = Counter()
