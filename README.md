@@ -8,7 +8,7 @@ Inspired by JP Morgan's challenge and Botometer which detects twitter bots, we c
 
 When user enter a link to online news, the programme will output the probability that it believes the real.
 
-## How I built it
+## How we built it
 
 1. We first collected and parsed a large amount of data, including title, content and urls of fake news and real news. 
 2. Then the data is fed to our Machine Learning model to train. In the end we have chosen and tuned a RandomForest Model for prediction. 
@@ -16,11 +16,11 @@ When user enter a link to online news, the programme will output the probability
 4. For users, we created a web scraper which returns the news content when a link is provided. 
 5. Lastly, we have a GUI for the tool.
 
-## Challenges I ran into
+## Challenges we ran into
 1. Insufficient data for Deep Learning - used Random Forest instead, a supervised machine learning model
 2. Some bugs with GUI not displaying image - fixed
 
-## Accomplishments that I'm proud of
+## Accomplishments that we're proud of
 
 1. The tool works for both English and Italian.
 2. The tool is working correctly - the accuracy on test data can go up to 80%
