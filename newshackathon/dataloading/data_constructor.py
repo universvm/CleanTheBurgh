@@ -2,13 +2,16 @@ import os
 import numpy as np
 from collections import Counter
 from json.decoder import JSONDecodeError
+from urllib3.exceptions import NewConnectionError
 from newshackathon.dataloading.jsonparser import load_json_data
 from newshackathon.dataloading.processing import count_words
+from newshackathon.dataloading.webscraper import scrap_data
 from newshackathon.definitions import ROOT_DIR
 
 FAKE_NEWS_DIRECTORY = ROOT_DIR + '../Data/fake/'
 REAL_NEWS_DIRECTORY = ROOT_DIR + '../Data/real/'
 JSON_SUBDIRECTORY = 'json/'
+URLS_FILENAME = 'urls.txt'
 
 
 def construct_data_set():
@@ -31,7 +34,12 @@ def _load_data(directory):
         except JSONDecodeError:
             print(filename + ' doesn\'t work')
 
-    # data += TODO urls
+    with open(directory + URLS_FILENAME, "r") as urls_file:
+        for url in urls_file:
+            try:
+                data.append(scrap_data(url))
+            except:
+                print(url + ' couldn\'t be scraped')
 
     processed_data = []
     all_words_counter = Counter()
