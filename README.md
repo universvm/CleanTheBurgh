@@ -1,4 +1,4 @@
-![alt text](https://raw.githubusercontent.com/universvm/news_hackathon/master/project_logo.png "CleanTheBurgh")
+![CleanTheBurgh](https://raw.githubusercontent.com/universvm/news_hackathon/master/logo.png "CleanTheBurgh")
 
 # CleanTheBurgh - Detecting fake news in English and Italian
 
