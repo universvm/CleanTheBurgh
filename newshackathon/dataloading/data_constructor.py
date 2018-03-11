@@ -18,12 +18,18 @@ class DataConstructor(object):
         self._docs_count = len(real_news) + len(fake_news)
         self._word_index_dict = self._choose_features()
         print('featureset size: {}'.format(len(self._word_index_dict)))
-        self._trainset = [self._construct_data_vector(words_frequency, False) for _, _, words_frequency in real_news]
-        self._trainset += [self._construct_data_vector(words_frequency, True) for _, _, words_frequency in fake_news]
+        self._trainset = [self._construct_data_vector(words_frequency, is_false=False) for _, _, words_frequency in real_news]
+        self._trainset += [self._construct_data_vector(words_frequency, is_false=True) for _, _, words_frequency in fake_news]
         self._trainset = np.array(self._trainset)
 
     def get_trainset(self):
         return self._trainset
+
+    def calculate_feature_vector(self, body):
+        words_counter = Counter(body)
+        words_count = sum(words_counter.values())
+        words_frequency = {word: (word_count / words_count) for word, word_count in words_counter.items()}
+        return self._construct_data_vector(words_frequency)
 
     def _load_data(self, directory):
         json_dir = directory + JSON_SUBDIRECTORY
@@ -51,9 +57,13 @@ class DataConstructor(object):
 
         return word_index_dict
 
-    def _construct_data_vector(self, words_frequency, is_false):
-        data_vector = np.empty(len(self._word_index_dict) + 1)
-        data_vector[len(self._word_index_dict)] = int(is_false)
+    def _construct_data_vector(self, words_frequency, is_false=None):
+        if is_false is None:
+            data_vector = np.empty(len(self._word_index_dict))
+        else:
+            data_vector = np.empty(len(self._word_index_dict) + 1)
+            data_vector[len(self._word_index_dict)] = int(is_false)
+
         for word, index in self._word_index_dict.items():
             frequency = words_frequency.get(word, 0)
             data_vector[index] = frequency
