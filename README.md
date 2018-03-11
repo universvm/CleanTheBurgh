@@ -1,6 +1,7 @@
-<div style="text-align:center"><img src="https://raw.githubusercontent.com/universvm/news_hackathon/master/logo.png" width=306 height=347 /></div>
+<h1 align="center"><img src="https://raw.githubusercontent.com/universvm/news_hackathon/master/project_logo.png" width=306 height=347 /></h1>
 
-# CleanTheBurgh - Detecting fake news in English and Italian
+<h1 align="center"># CleanTheBurgh </h1>
+<h2 align="center"> Detecting fake news in English and Italian</h2>
 
 ## Inspiration
 
