@@ -84,11 +84,18 @@ def draw_gui():
     window.title('CleanTheBurgh')
     window.geometry("300x450")
     window.configure()
+    global path
     path = "logo.png"
+    global img
 
-    img = ImageTk.PhotoImage(Image.open(path))
+    global panel
+    image_logo = Image.open(path)
+    image_logo = image_logo.resize((206,247))
+    img = ImageTk.PhotoImage(image_logo)
+
 
     panel = Label(window, image=img)
+    panel.configure(image=img)
     panel.image = img
 
     panel.pack(side="top")
@@ -117,4 +124,3 @@ X_train, Y_train = split_data(trainset)
 forest_model = train_forest()
 
 draw_gui()
-
