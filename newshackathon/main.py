@@ -43,6 +43,7 @@ def train_svc_rbf():
 
 data_constructor = DataConstructor()
 trainset = data_constructor.get_trainset()
+data_constructor.calculate_feature_vector(body)
 print('dataset size: {}'.format(len(trainset)))
 
 X_train, X_test, Y_train, Y_test = split_data(trainset)

@@ -26,7 +26,7 @@ class DataConstructor(object):
         return self._trainset
 
     def calculate_feature_vector(self, body):
-        words_counter = Counter(body)
+        words_counter = count_words(body)
         words_count = sum(words_counter.values())
         words_frequency = {word: (word_count / words_count) for word, word_count in words_counter.items()}
         return self._construct_data_vector(words_frequency)

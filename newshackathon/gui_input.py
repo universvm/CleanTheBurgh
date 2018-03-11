@@ -3,10 +3,11 @@ from sklearn.svm import SVC
 from sklearn.naive_bayes import GaussianNB
 from sklearn.metrics import accuracy_score
 from sklearn.model_selection import train_test_split
-from newshackathon.dataloading.data_constructor import construct_data_set
+from newshackathon.dataloading.data_constructor import DataConstructor
 from tkinter import *
 from PIL import ImageTk, Image
 from newshackathon.dataloading.webscraper import scrap_data
+import numpy as np
 
 
 def split_data(data_array):
@@ -18,31 +19,36 @@ def split_data(data_array):
 def train_gnb():
     gnb = GaussianNB()
     gnb.fit(X_train, Y_train)
-    return accuracy_score(Y_test, gnb.predict(X_test)), accuracy_score(Y_train, gnb.predict(X_train))
+    # return accuracy_score(Y_test, gnb.predict(X_test)), accuracy_score(Y_train, gnb.predict(X_train))
+    return gnb
 
 
 def train_forest():
     rf = RandomForestClassifier(max_features=200, max_depth=300)
     rf.fit(X_train, Y_train)
-    return accuracy_score(Y_test, rf.predict(X_test)), accuracy_score(Y_train, rf.predict(X_train))
+    # return accuracy_score(Y_test, rf.predict(X_test)), accuracy_score(Y_train, rf.predict(X_train))
+    return rf
 
 
 def train_svc_poly():
     svc_poly = SVC(kernel="poly")
     svc_poly.fit(X_train, Y_train)
-    return accuracy_score(Y_test, svc_poly.predict(X_test)), accuracy_score(Y_train, svc_poly.predict(X_train))
+    # return accuracy_score(Y_test, svc_poly.predict(X_test)), accuracy_score(Y_train, svc_poly.predict(X_train))
+    return svc_poly
 
 
 def train_svc_linear():
     svc_linear = SVC(kernel="linear")
     svc_linear.fit(X_train, Y_train)
-    return accuracy_score(Y_test, svc_linear.predict(X_test)), accuracy_score(Y_train, svc_linear.predict(X_train))
+    # return accuracy_score(Y_test, svc_linear.predict(X_test)), accuracy_score(Y_train, svc_linear.predict(X_train))
+    return svc_linear
 
 
 def train_svc_rbf(stringfrominput):
     svc_rbf = SVC(kernel="rbf")
     svc_rbf.fit(X_train, Y_train)
-    return accuracy_score(Y_test, svc_rbf.predict(X_test)), accuracy_score(Y_train, svc_rbf.predict(X_train))
+    # return accuracy_score(Y_test, svc_rbf.predict(X_test)), accuracy_score(Y_train, svc_rbf.predict(X_train))
+    return svc_rbf
 
 
 def printer(string):
@@ -52,13 +58,24 @@ def printer(string):
 
 
 def get_gui_input():
-    global e
+    # global e
     text.delete('1.0', END)
     url_domain = e.get()
 
     domain, title, body = scrap_data(url_domain)
 
-    # text.insert(INSERT, string)
+    X_test = data_constructor.calculate_feature_vector(body)
+    print(X_test)
+
+    X_test = np.array(X_test)
+    print(X_test)
+    X_test = X_test.reshape(1, -1)
+    print('reshaped')
+    print(X_test)
+
+    result = forest_model.predict_proba(np.array(X_test))[0][0]
+
+    text.insert(INSERT, "Clean probabilty:\n" + str(result*100)[0:5] + "%\n")
 
 
 def draw_gui():
@@ -72,6 +89,7 @@ def draw_gui():
     img = ImageTk.PhotoImage(Image.open(path))
 
     panel = Label(window, image=img)
+    panel.image = img
 
     panel.pack(side="top")
 
@@ -90,15 +108,13 @@ def draw_gui():
     b.pack(side='bottom')
     window.mainloop()
 
-data = construct_data_set()
-print('dataset size: {}'.format(len(data)))
+data_constructor = DataConstructor()
+trainset = data_constructor.get_trainset()
+print('dataset size: {}'.format(len(trainset)))
 
-X_train, Y_train = split_data(data)
+X_train, Y_train = split_data(trainset)
 
+forest_model = train_forest()
 
+draw_gui()
 
-print('Gaussian NB accuracy (test, train): ' + str(train_forest()))
-print('Random Forest accuracy (test, train): ' + str(train_forest()))
-print('SVM Polly accuracy (test, train): ' + str(train_svc_poly()))
-print('SVM Linear accuracy (test, train): ' + str(train_svc_linear()))
-print('SVM RBF accuracy (test, train): ' + str(train_svc_rbf()))
