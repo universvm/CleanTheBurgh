@@ -19,4 +19,3 @@ def create_bs_dict():
             bs_json[it_domain.lower()] = 1
 
     return bs_json
-
