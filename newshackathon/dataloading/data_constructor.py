@@ -2,11 +2,13 @@ import os
 import numpy as np
 from collections import Counter
 from json.decoder import JSONDecodeError
-from urllib3.exceptions import NewConnectionError
 from newshackathon.dataloading.jsonparser import load_json_data
 from newshackathon.dataloading.processing import count_words
 from newshackathon.dataloading.webscraper import scrap_data
 from newshackathon.definitions import ROOT_DIR
+
+MAX_WORD_FREQUENCY = 1
+MIN_WORD_FREQUENCY = 1 / 8
 
 FAKE_NEWS_DIRECTORY = ROOT_DIR + '../Data/fake/'
 REAL_NEWS_DIRECTORY = ROOT_DIR + '../Data/real/'
@@ -18,7 +20,9 @@ def construct_data_set():
     real_news, real_words_counter = _load_data(REAL_NEWS_DIRECTORY)
     fake_news, fake_words_counter = _load_data(FAKE_NEWS_DIRECTORY)
     all_words_counter = real_words_counter + fake_words_counter
-    word_index_dict = _choose_features(all_words_counter)
+
+    word_index_dict = _choose_features(all_words_counter, len(fake_news) + len(real_news))
+    print('featureset size: '.format(word_index_dict))
 
     dataset = [_construct_data_vector(words_frequency, word_index_dict, False) for _, _, words_frequency in real_news]
     dataset += [_construct_data_vector(words_frequency, word_index_dict, True) for _, _, words_frequency in fake_news]
@@ -53,8 +57,10 @@ def _load_data(directory):
     return processed_data, all_words_counter
 
 
-def _choose_features(words_counter):
-    words = words_counter.keys()
+def _choose_features(words_counter, documents_count):
+    words = [word for word in words_counter.keys()
+             if MIN_WORD_FREQUENCY < words_counter[word] / documents_count < MAX_WORD_FREQUENCY]
+
     word_index_dict = {}
     for i, word in enumerate(words):
         word_index_dict[word] = i
