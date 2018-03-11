@@ -4,19 +4,22 @@ from urllib.parse import urlparse
 
 
 def scrap_data(url):
-    source = requests.get(url, timeout=20)
-    if not source:
-        raise ConnectionError('Couldn\'t get a source from {}'.format(source))
+    try:
+        source = requests.get(url, timeout=20)
+        if not source:
+            raise ConnectionError('Couldn\'t get a source from {}'.format(url))
 
-    soup = BeautifulSoup(source.text, 'html.parser')
-    article_container = _extract_article_container(soup)
-    if not article_container:
-        raise ConnectionError('Couldn\'t find any article at {}'.format(source))
+        soup = BeautifulSoup(source.text, 'html.parser')
+        article_container = _extract_article_container(soup)
+        if not article_container:
+            raise ConnectionError('Couldn\'t get a source from {}'.format(url))
 
-    domain = _extract_domain(url)
-    title = _extract_title(article_container)
-    body = _extract_body(article_container)
-    return domain, title, body
+        domain = _extract_domain(url)
+        title = _extract_title(article_container)
+        body = _extract_body(article_container)
+        return domain, title, body
+    except Exception as e:
+        print(e)
 
 
 def _extract_domain(url):

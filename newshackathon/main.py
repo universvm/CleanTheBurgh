@@ -19,7 +19,7 @@ def train_gnb():
 
 
 def train_forest():
-    rf = RandomForestClassifier(max_features=200, max_depth=300)
+    rf = RandomForestClassifier(max_features=100, max_depth=100)
     rf.fit(X_train, Y_train)
     return accuracy_score(Y_test, rf.predict(X_test)), accuracy_score(Y_train, rf.predict(X_train))
 
