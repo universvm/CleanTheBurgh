@@ -1,4 +1,4 @@
-CleanTheBurgh - Detecting fake news in English and Italian
+### CleanTheBurgh - Detecting fake news in English and Italian
 
 ## Inspiration
 
