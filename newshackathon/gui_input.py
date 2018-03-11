@@ -11,7 +11,6 @@ from newshackathon.dataloading.webscraper import scrap_data
 from newshackathon.bsdetector import bs_detect
 import numpy as np
 
-
 def split_data(data_array):
     x = data_array[:, :-1]
     y = data_array[:, -1]
@@ -26,7 +25,7 @@ def train_gnb():
 
 
 def train_forest():
-    rf = RandomForestClassifier(max_features=200, max_depth=300)
+    rf = RandomForestClassifier(max_features=200, max_depth=300,random_state=123)
     rf.fit(X_train, Y_train)
     # return accuracy_score(Y_test, rf.predict(X_test)), accuracy_score(Y_train, rf.predict(X_train))
     return rf
