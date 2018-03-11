@@ -3,7 +3,7 @@ from sklearn.svm import SVC
 from sklearn.naive_bayes import GaussianNB
 from sklearn.metrics import accuracy_score
 from sklearn.model_selection import train_test_split
-from newshackathon.dataloading.data_constructor import construct_data_set
+from newshackathon.dataloading.data_constructor import DataConstructor
 
 
 def split_data(data_array):
@@ -41,12 +41,13 @@ def train_svc_rbf():
     svc_rbf.fit(X_train, Y_train)
     return accuracy_score(Y_test, svc_rbf.predict(X_test)), accuracy_score(Y_train, svc_rbf.predict(X_train))
 
-data = construct_data_set()
-print('dataset size: {}'.format(len(data)))
+data_constructor = DataConstructor()
+trainset = data_constructor.get_trainset()
+print('dataset size: {}'.format(len(trainset)))
 
-X_train, X_test, Y_train, Y_test = split_data(data)
+X_train, X_test, Y_train, Y_test = split_data(trainset)
 
-print('Gaussian NB accuracy (test, train): ' + str(train_forest()))
+print('Gaussian NB accuracy (test, train): ' + str(train_gnb()))
 print('Random Forest accuracy (test, train): ' + str(train_forest()))
 print('SVM Polly accuracy (test, train): ' + str(train_svc_poly()))
 print('SVM Linear accuracy (test, train): ' + str(train_svc_linear()))
